@@ -1,0 +1,63 @@
+<div class="upload-container">
+  <h2>Subir Documento</h2>
+
+  <div
+  class="drag-drop-area"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+  [class.dragging]="isDragging"
+>
+  <p *ngIf="!isDragging">Arrastra y suelta tu archivo aquí o haz clic en el botón de abajo</p>
+  <p *ngIf="isDragging">¡Suelta el archivo para subirlo!</p>
+</div>
+
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+
+    <div>
+      <label for="file">Selecciona un archivo:</label>
+      <input
+        id="file"
+        type="file"
+        (change)="onFileSelected($event)"
+        accept=".doc,.pdf,.txt,.xls"
+      />
+      <div *ngIf="serverResponse && !uploadForm.get('fileContent')?.value">
+        <p class="error-message">{{ serverResponse }}</p>
+      </div>
+    </div>
+
+
+    <div>
+      <label for="fileName">Nombre del archivo:</label>
+      <input id="fileName" formControlName="fileName" type="text" readonly />
+      <div *ngIf="FormUtils.isValidField(uploadForm, 'fileName')">
+        {{ FormUtils.getFieldError(uploadForm, 'fileName') }}
+      </div>
+    </div>
+
+
+    <div>
+      <label for="date">Fecha:</label>
+      <input id="date" formControlName="date" type="date" />
+      <div *ngIf="FormUtils.isValidField(uploadForm, 'date')">
+        {{ FormUtils.getFieldError(uploadForm, 'date') }}
+      </div>
+    </div>
+
+
+    <div>
+      <label for="extension">Extensión:</label>
+      <input id="extension" formControlName="extension" type="text" readonly />
+      <div *ngIf="FormUtils.isValidField(uploadForm, 'extension')">
+        {{ FormUtils.getFieldError(uploadForm, 'extension') }}
+      </div>
+    </div>
+
+    <button type="submit">Subir</button>
+  </form>
+
+  <div *ngIf="serverResponse">
+    <p>{{ serverResponse }}</p>
+  </div>
+</div>

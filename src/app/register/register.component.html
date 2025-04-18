@@ -1,0 +1,83 @@
+<div class="form-container">
+<div class="form-card">
+
+<h2>Register</h2>
+<hr />
+
+<div class="row">
+  <div class="col">
+
+    <form autocomplete="off" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="fullName">Nombre y apellido</label>
+        <div class="col-sm-9">
+          <input
+            id="fullName-unique"
+            type="text"
+            class="form-control"
+            placeholder="Nombre y apellido"
+            formControlName="name"
+          />
+          <span
+            *ngIf="formUtils.isValidField(myForm, 'name')"
+            class="form-text text-danger"
+          >
+            {{ formUtils.getFieldError(myForm, 'name') }}
+          </span>
+        </div>
+      </div>
+
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="email">Email</label>
+        <div class="col-sm-9">
+          <input
+            id="email-unique"
+            type="email"
+            class="form-control"
+            placeholder="Email del usuario"
+            formControlName="email"
+          />
+          <span
+            *ngIf="formUtils.isValidField(myForm, 'email')"
+            class="form-text text-danger"
+          >
+            {{ formUtils.getFieldError(myForm, 'email') }}
+          </span>
+        </div>
+      </div>
+
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="password">Password</label>
+        <div class="col-sm-9">
+          <input
+            id="password-unique"
+            type="password"
+            class="form-control"
+            placeholder="Password de su cuenta"
+            formControlName="password"
+          />
+          <span
+            *ngIf="formUtils.isValidField(myForm, 'password')"
+            class="form-text text-danger"
+          >
+            {{ formUtils.getFieldError(myForm, 'password') }}
+          </span>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary float-end" type="submit">
+            Crear cuenta
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>

@@ -1,0 +1,76 @@
+<div class="documents-list-container">
+  <h2>Lista de Documentos</h2>
+
+  <div class="actions">
+    <button (click)="goToCreateDocument()">Crear Nuevo Documento</button>
+  </div>
+
+  <div class="page-size-controls">
+    <label for="pageSize">Documentos por página:</label>
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="fetchDocuments()">
+      <option *ngFor="let size of [5, 10, 20]" [value]="size">{{ size }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Cargando documentos...</p>
+  </div>
+
+  <table class="documents-table" *ngIf="paginatedDocuments.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Fecha</th>
+        <th>Extensión</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let document of paginatedDocuments">
+        <td>{{ document._id }}</td>
+        <td>{{ document.fileName }}</td>
+        <td>{{ document.date | date: 'medium' }}</td>
+        <td>{{ document.extension }}</td>
+        <td>
+          <button (click)="onPreview(document)">Previsualizar</button>
+          <button (click)="confirmDelete(document._id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="paginatedDocuments.length === 0 && !errorMessage">
+    No hay documentos disponibles.
+  </p>
+
+  <div class="pagination-controls" *ngIf="totalPages > 0">
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      Anterior
+    </button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+      Siguiente
+    </button>
+  </div>
+
+  <div *ngIf="selectedDocument" class="preview-container">
+    <h3>Previsualización del Documento</h3>
+    <button (click)="closePreview()">Cerrar</button>
+    <div *ngIf="selectedDocument.extension === 'pdf'; else textPreview">
+      <iframe
+        *ngIf="safeUrl"
+        [src]="safeUrl"
+        width="100%"
+        height="500px"
+      ></iframe>
+    </div>
+    <ng-template #textPreview>
+      <pre>{{ selectedDocument.fileContent || '' | base64Decode }}</pre>
+    </ng-template>
+  </div>
+</div>
